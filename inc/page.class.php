@@ -10,12 +10,12 @@ class Page {
   private $title = null;
   private $body  = null;
 
-  // Attributs de classe contenant le contenu du header et du footer du template
-  public static $header = <<<HTML
+  // Constantes de classe contenant le contenu du header et du footer du template
+  const header = <<<HTML
   <h1>Gestion des stages</h1>
 HTML;
 
-  public static $footer = <<<HTML
+  const footer = <<<HTML
   &copy; 2015
 HTML;
 
@@ -82,6 +82,8 @@ HTML
     //TODO
     //Template générique du site
 
+    $header = self::header;
+    $footer = self::footer;
     return <<<HTML
 <!doctype html>
 <html lang="fr">
@@ -92,11 +94,11 @@ HTML
     </head>
     <body>
       <header>
-        {self::$header}
+        {$header}
       </header>
       {$this->body}
       <footer>
-        {self::$footer}
+        {$footer}
       </footer>
     </body>
 </html>
