@@ -7,6 +7,7 @@ require_once "config.inc.php";
  */
 class Enseignant {
   // Attributs d'instance
+  private $login;
   private $id;
   private $nom;
   private $prenom;
@@ -19,6 +20,7 @@ class Enseignant {
   private $numRue;
   private $rue;
   private $complAdr;
+  private $domainePredom;
   private $stagesTutores = array();
 
   private function __construct() {}

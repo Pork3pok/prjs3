@@ -9,7 +9,6 @@ require_once "config.inc.php";
  */
 class Stage {
   // Attributs d'instance
-  private $id;
   private $etudiant;
   private $entreprise;
   private $enseignant;
@@ -21,11 +20,13 @@ class Stage {
   private function __construct() {}
 
   /**
-  * Usine à fabriquer des Stage.
-  * @param int $id : l'ID du Stage
-  */
-  public static function createFromID($id) {
+   * Usine à fabriquer des Stage
+   * @param  int  $idEtudiant   : l'ID de l'étudiant
+   * @param  int  $idEntreprise : l'ID de l'entreprise
+   * @param  int  $idEnseignant : l'ID de l'enseignant
+   * @return Stage
+   */
+  public static function createFromID($idEtudiant, $idEntreprise, $idEnseignant) {
     //TODO
-    // Fait une requete sur la BD et renvoie une instance de Stage correspondante, grâce à PDO_FETCH_CLASS
   }
 }

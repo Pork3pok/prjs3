@@ -7,6 +7,7 @@ require_once "config.inc.php";
  */
 class Etudiant {
   /* Attributs d'instance */
+  private $login;
   private $id;
   private $nom;
   private $prenom;
