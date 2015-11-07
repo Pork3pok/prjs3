@@ -1,12 +1,13 @@
 <?php
 
-require_once "config.inc.php";
+require_once "inc/config.inc.php";
 
 /**
  * Classe représentant un Etudiant
  */
 class Etudiant {
   /* Attributs d'instance */
+  private $login;
   private $id;
   private $nom;
   private $prenom;

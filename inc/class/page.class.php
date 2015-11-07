@@ -5,18 +5,19 @@
  * Permet de garder un template général sur le site, et d'en changer facilement et rapidement
  */
 class Page {
-  /**
-   * @var string Texte compris entre <head> et </head>
-   */
-  private $head  = null ;
-  /**
-   * @var string Texte compris entre <title> et </title>
-   */
-  private $title = null ;
-  /**
-   * @var string Texte compris entre <body> et </body>
-   */
-  private $body  = null ;
+  // Attributs d'instance
+  private $head  = null;
+  private $title = null;
+  private $body  = null;
+
+  // Constantes de classe contenant le contenu du header et du footer du template
+  const header = <<<HTML
+  <h1>Gestion des stages</h1>
+HTML;
+
+  const footer = <<<HTML
+  &copy; 2015
+HTML;
 
   /**
    * Constructeur
@@ -24,17 +25,6 @@ class Page {
    */
   public function __construct($title = "Page sans titre") {
     $this->setTitle($title) ;
-  }
-
-  /**
-   * Protéger les caractères spéciaux pouvant dégrader la page Web
-   * @see http://php.net/manual/en/function.htmlentities.php
-   * @param string $string La chaîne à protéger
-   *
-   * @return string La chaîne protégée
-   */
-  public function escapeString($string) {
-    return htmlentities($string, ENT_QUOTES|ENT_HTML5, "utf-8") ;
   }
 
   /**
@@ -46,32 +36,6 @@ class Page {
   }
 
   /**
-   * Ajouter un contenu dans head
-   * @param string $content Le contenu à ajouter
-   *
-   * @return void
-   */
-  public function appendToHead($content) {
-    $this->head .= $content ;
-  }
-
-  /**
-   * Ajouter un contenu CSS dans head
-   * @param string $css Le contenu CSS à ajouter
-   *
-   * @return void
-   */
-  public function appendCss($css) {
-    $this->appendToHead(<<<HTML
-  <style type='text/css'>
-  $css
-  </style>
-
-HTML
-) ;
-  }
-
-  /**
    * Ajouter l'URL d'un script CSS dans head
    * @param string $url L'URL du script CSS
    *
@@ -80,22 +44,6 @@ HTML
   public function appendCssUrl($url) {
     $this->appendToHead(<<<HTML
   <link rel="stylesheet" type="text/css" href="{$url}">
-
-HTML
-) ;
-  }
-
-  /**
-   * Ajouter un contenu JavaScript dans head
-   * @param string $js Le contenu JavaScript à ajouter
-   *
-   * @return void
-   */
-  public function appendJs($js) {
-    $this->appendToHead(<<<HTML
-  <script type='text/javascript'>
-  $js
-  </script>
 
 HTML
 ) ;
@@ -134,16 +82,24 @@ HTML
     //TODO
     //Template générique du site
 
+    $header = self::header;
+    $footer = self::footer;
     return <<<HTML
 <!doctype html>
 <html lang="fr">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta charset="utf-8">
         <title>{$this->title}</title>
         {$this->head}
     </head>
     <body>
-        {$this->body}
+      <header>
+        {$header}
+      </header>
+      {$this->body}
+      <footer>
+        {$footer}
+      </footer>
     </body>
 </html>
 HTML;

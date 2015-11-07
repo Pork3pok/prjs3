@@ -1,26 +1,23 @@
 <?php
 
-require_once "config.inc.php";
+require_once "inc/config.inc.php";
 
 /**
  * Classe représentant une Entreprise
  */
 class Entreprise {
   /* Attributs d'instance */
+  private $login;
   private $id_entreprise;
   private $nom_entreprise;
-  private $code_entreprise; // SIRET ?
+  private $code_entreprise;
   private $ville_entreprise;
   private $codePostal_entreprise;
   private $numRue_entreprise;
   private $rue_entreprise;
   private $complAdr_entreprise;
   private $siteWeb_entreprise;
-  private $nom_contact;
-  private $prenom_contact;
-  private $sexe_contact;
-  private $email_contact;
-  private $tel_contact;
+  private $description_entreprise;
 
   private $offresProposees = array();
   private $stages = null;

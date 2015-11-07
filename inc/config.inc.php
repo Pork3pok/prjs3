@@ -13,10 +13,11 @@ spl_autoload_register(function ($_classe) {
     $fichier = strToLower($_classe). ".class.php";
     if (file_exists($fichier)) { // le fichier est dans le même répertoire
       require_once($fichier);
-	  } else if (file_exists("inc/$fichier")) { // le fichier est dans le répertoire inc
-      require_once($fichier);
+	  } else if (file_exists("inc/class/$fichier")) { // le fichier est dans le répertoire inc
+      require_once("inc/class/$fichier");
     }
 });
 
 // Config de la BD
-myPDO::setConfiguration('mysql:host=localhost;dbname=DBNAME;charset=utf8', 'USER', 'PASS');
+require_once "class/myPDO.class.php";
+myPDO::setConfiguration('mysql:host=localhost;dbname=prjs3;charset=utf8', 'root', '');
