@@ -1,6 +1,6 @@
 <?php
 
-require_once "config.inc.php";
+require_once "inc/config.inc.php";
 
 /**
  * Singleton permettant d'accéder à toutes les données de l'application
