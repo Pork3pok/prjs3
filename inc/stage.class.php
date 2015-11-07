@@ -9,13 +9,13 @@ require_once "config.inc.php";
  */
 class Stage {
   // Attributs d'instance
-  private $etudiant;
-  private $entreprise;
-  private $enseignant;
+  private $idEtu;
+  private $idOffre;
+  private $idEnseignant;
   private $accepteEtudiant = false;
   private $accepteEntreprise = false;
   private $accepterEnseignant = false;
-  private $offreCorrespondante;
+  private $entrepriseCorrespondante;
 
   private function __construct() {}
 
@@ -26,7 +26,7 @@ class Stage {
    * @param  int  $idEnseignant : l'ID de l'enseignant
    * @return Stage
    */
-  public static function createFromID($idEtudiant, $idEntreprise, $idEnseignant) {
+  public static function createFromIDs($idEtudiant, $idOffre, $idEnseignant) {
     //TODO
   }
 }

@@ -23,20 +23,20 @@ class Gestionnaire {
 
     // Affecte les enseignants
     $stmt = $pdo->prepare(<<<SQL
-      SELECT MAX(id) AS maxEnseignant
-      FROM ENSEIGNANT
+      SELECT MAX(idPers) AS maxPersonne
+      FROM PERSONNE
 SQL
     );
     $stmt->execute();
     $data = $stmt->fetch();
-    $maxEnseignant = $data["maxEnseignant"];
-    for ($i = 1; $i <= $maxEnseignant; $i++) {
+    $maxPersonne = $data["maxPersonne"];
+    for ($i = 1; $i <= $maxPersonne; $i++) {
       $this->listeEnseignants[] = Enseignant::createFromID($i);
     }
 
     // Affecte les entreprises
     $stmt = $pdo->prepare(<<<SQL
-      SELECT MAX(id) AS maxEntreprise
+      SELECT MAX(idEnt) AS maxEntreprise
       FROM ENTREPRISE
 SQL
     );
@@ -47,22 +47,21 @@ SQL
       $this->listeEntreprises[] = Entreprise::createFromID($i);
     }
 
-    // Affecte les étudiants
     $stmt = $pdo->prepare(<<<SQL
-      SELECT MAX(id) AS maxEtudiant
-      FROM ETUDIANT
+      SELECT MAX(idPers) AS maxPersonne
+      FROM PERSONNE
 SQL
     );
     $stmt->execute();
     $data = $stmt->fetch();
-    $maxEtudiant = $data["maxEtudiant"];
-    for ($i = 1; $i <= $maxEtudiant; $i++) {
+    $maxPersonne = $data["maxPersonne"];
+    for ($i = 1; $i <= $maxPersonne; $i++) {
       $this->listeEtudiants[] = Etudiant::createFromID($i);
     }
 
     // Affecte les offres
     $stmt = $pdo->prepare(<<<SQL
-      SELECT MAX(id) AS maxOffre
+      SELECT MAX(idOffre) AS maxOffre
       FROM OFFRESTAGE
 SQL
     );
@@ -75,16 +74,13 @@ SQL
 
     // Affecte les stages
     $stmt = $pdo->prepare(<<<SQL
-      SELECT MAX(id) AS maxStage
+      SELECT idEtu, idOffre, idEns
       FROM STAGE
 SQL
     );
     $stmt->execute();
-    $data = $stmt->fetch();
-    $maxStage = $data["maxStage"];
-    for ($i = 1; $i <= $maxStage; $i++) {
-      $this->listeStages[] = Stage::createFromID($i);
-
+    while (($ligne = $stmt->fetch()) !== false) {
+      $this->listeStages[] = Stage::createFromIDs($ligne["idEtu"], $ligne["idOffre"], $ligne["idEns"]);
     }
   }
 
