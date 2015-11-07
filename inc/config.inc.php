@@ -19,4 +19,4 @@ spl_autoload_register(function ($_classe) {
 });
 
 // Config de la BD
-myPDO::setConfiguration('mysql:host=localhost;dbname=DBNAME;charset=utf8', 'USER', 'PASS');
+myPDO::setConfiguration('mysql:host=localhost;dbname=prjs3;charset=utf8', 'root', '');
