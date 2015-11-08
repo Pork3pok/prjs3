@@ -221,6 +221,17 @@ SQL
   }
 
   /**
+   * Traite un formulaire d'inscription
+   * @param  $_REQUEST $formulaire : les données du formulaire d'inscription
+   * @return html : le message (erreur ou réussite) correspondant à l'état de l'inscription
+   */
+  public function inscription($formulaire) {
+    // 1ère étape : déterminer le type d'inscription (enseignant/étudiant/entreprise)
+    // 2ème étape : vérifier la validité des champs selon le type d'inscription
+    // 3ème étape : ajouter dans la BD
+  }
+
+  /**
    * Détermine le type d'un utilisateur
    * @param  String $login : le login de l'utilisateur
    * @return String : le type de l'utilisateur
