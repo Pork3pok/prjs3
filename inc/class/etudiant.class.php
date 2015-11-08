@@ -8,7 +8,8 @@ require_once "inc/config.inc.php";
 class Etudiant {
   /* Attributs d'instance */
   private $login;
-  private $id;
+  private $idEtu;
+  private $sha1mdp;
   private $nom;
   private $prenom;
   private $sexe;
@@ -16,7 +17,7 @@ class Etudiant {
   private $telP;
   private $email;
   private $ville;
-  private $codePostal;
+  private $CP;
   private $numRue;
   private $rue;
   private $complAdr;
@@ -32,7 +33,7 @@ class Etudiant {
   */
   public static function createFromID($id) {
     //TODO
-    // Fait une requete sur la BD et renvoie une instance de Stage correspondante, grâce à PDO_FETCH_CLASS
+    // Récupère les données de la table "Personne" correspondantes à l'ID passé en paramètre, et y ajoute les données spécifiques de la table "Etudiant"
   }
 
   /**
@@ -72,8 +73,8 @@ class Etudiant {
     $pdo = myPDO::getInstance();
     $stmt = $pdo->prepare(<<<SQL
       SELECT SHA1(CONCAT(SHA1(email), mdpSHA1, :token)) AS chaine
-      FROM ETUDIANT
-      WHERE id = :id
+      FROM PERSONNE
+      WHERE idPers = :id
 SQL
     );
     $stmt->execute(array(
