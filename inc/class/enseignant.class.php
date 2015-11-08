@@ -77,19 +77,9 @@ class Enseignant {
    * @return String        : la chaine cryptée
    */
   public function getCrypt() {
-    $token = $_SESSION["token"];
-    $pdo = myPDO::getInstance();
-    $stmt = $pdo->prepare(<<<SQL
-      SELECT SHA1(CONCAT(SHA1(email), mdpSHA1, :token)) AS chaine
-      FROM ENSEIGNANT
-      WHERE id = :id
-SQL
-    );
-    $stmt->execute(array(
-      "token" => $token,
-      "id" => $this->id
-    ));
-    $data = $stmt->fetch();
-    return ($data["chaine"]);
+    $tokenSHA1 = sha1($_SESSION["token"]);
+    $loginSHA1 = sha1($this->login);
+    $mdpSHA1 = $this->sha1mdp;
+    return sha1($loginSHA1 . $mdpSHA1 . $tokenSHA1);
   }
 }
