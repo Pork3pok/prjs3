@@ -12,7 +12,6 @@ $g = Gestionnaire::getInstance();
 $dernieresOffres = $g->dernieresOffres(10);
 
 $p = new Page("Accueil");
-//test
-$p->appendContent($dernieresOffres."TEST"."TEST2");
+$p->appendContent($dernieresOffres);
 
 echo $p->toHTML();
