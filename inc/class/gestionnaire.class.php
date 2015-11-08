@@ -185,8 +185,8 @@ SQL
    * @param  String $chaineCryptee : la chaine cryptée envoyée par le formulaire de connexion
    * @return boolean               : true/false selon la réussite ou l'échec de la connexion
    */
-  public function connexion($email, $chaineCryptee) {
-    $type = $this->typeUtilisateur($email);
+  public function connexion($login, $chaineCryptee) {
+    $type = $this->typeUtilisateur($login);
 
     switch ($type) {
       case "etudiant": // connexion d'un étudiant
@@ -222,7 +222,7 @@ SQL
 
   /**
    * Détermine le type d'un utilisateur
-   * @param  String $email : l'email de l'utilisateur
+   * @param  String $login : le login de l'utilisateur
    * @return String : le type de l'utilisateur
    */
   private function typeUtilisateur($login) {
