@@ -8,16 +8,17 @@ require_once "inc/config.inc.php";
 class Entreprise {
   /* Attributs d'instance */
   private $login;
-  private $id_entreprise;
-  private $nom_entreprise;
-  private $code_entreprise;
-  private $ville_entreprise;
-  private $codePostal_entreprise;
-  private $numRue_entreprise;
-  private $rue_entreprise;
-  private $complAdr_entreprise;
-  private $siteWeb_entreprise;
-  private $description_entreprise;
+  private $sha1mdp;
+  private $idEnt;
+  private $nomEnt;
+  private $codeEnt;
+  private $villeEnt;
+  private $CPEnt;
+  private $numRueEnt;
+  private $rueEnt;
+  private $complAdrEnt;
+  private $siteWebEnt;
+  private $description;
 
   private $offresProposees = array();
   private $stages = null;
@@ -29,8 +30,20 @@ class Entreprise {
   * @param int $id : l'ID de l'Entreprise
   */
   public static function createFromID($id) {
-    //TODO
-    // Fait une requete sur la BD et renvoie une instance de Stage correspondante, grâce à PDO_FETCH_CLASS
+    $pdo = myPDO::getInstance();
+    $stmt = $pdo->prepare(<<<SQL
+    SELECT *
+    FROM ENTREPRISE
+    WHERE id = :id
+SQL
+    );
+    $stmt->execute(array("id" => $id));
+
+    $stmt->setFetchMode(PDO::FETCH_CLASS, 'Entreprise');
+
+    if(($object = $stmt->fetch()) !== false) {
+      return $object;
+    }
   }
 
   /**
@@ -57,19 +70,9 @@ class Entreprise {
    * @return String        : la chaine cryptée
    */
   public function getCrypt() {
-    $token = $_SESSION["token"];
-    $pdo = myPDO::getInstance();
-    $stmt = $pdo->prepare(<<<SQL
-      SELECT SHA1(CONCAT(SHA1(email), mdpSHA1, :token)) AS chaine
-      FROM ENTREPRISE
-      WHERE id = :id
-SQL
-    );
-    $stmt->execute(array(
-      "token" => $token,
-      "id" => $this->id
-    ));
-    $data = $stmt->fetch();
-    return ($data["chaine"]);
+    $tokenSHA1 = sha1($_SESSION["token"]);
+    $loginSHA1 = sha1($this->login);
+    $mdpSHA1 = $this->sha1mdp;
+    return sha1($loginSHA1 . $mdpSHA1 . $tokenSHA1);
   }
 }

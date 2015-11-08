@@ -20,6 +20,14 @@ HTML;
 HTML;
 
   /**
+   * Retourne la barre de navigation, selon le type d'utilisateur (entreprise/enseignant/étudiant/non connecté)
+   * @return HTML : nav
+   */
+  public static function getNav() {
+    //TODO
+  }
+
+  /**
    * Constructeur
    * @param string $title Titre de la page
    */
