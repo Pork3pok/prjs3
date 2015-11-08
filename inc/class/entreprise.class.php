@@ -34,7 +34,7 @@ class Entreprise {
     $stmt = $pdo->prepare(<<<SQL
     SELECT *
     FROM ENTREPRISE
-    WHERE id = :id
+    WHERE idEnt = :id
 SQL
     );
     $stmt->execute(array("id" => $id));

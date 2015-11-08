@@ -9,7 +9,7 @@ class Gestionnaire {
   // Attributs d'instance
   private $listeEtudiants = array();
   private $listeEntreprises = array();
-  public $listeEnseignants = array();
+  private $listeEnseignants = array();
   private $listeOffres = array();
   private $listeStages = array();
   private static $instance = null;

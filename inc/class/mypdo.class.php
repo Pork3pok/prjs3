@@ -1,5 +1,10 @@
 <?php
 
+/*
+  Remerciements à Jérôme Cutrona (http://crestic.univ-reims.fr/membre/45-jerome-cutrona)
+  pour le code de cette classe.
+*/
+
 final class myPDO {
     /**
      * myPDO $_PDOInstance Instance unique.

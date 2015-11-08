@@ -31,8 +31,37 @@ class Enseignant {
   * @param int $id : l'ID de l'Enseignant
   */
   public static function createFromID($id) {
-    // TODO
-    // Récupère les données de la table "Personne" correspondantes à l'ID passé en paramètre, et y ajoute les données spécifiques de la table "Enseignant"
+    $pdo = myPDO::getInstance();
+    // On récupère d'abord la Personne
+    $stmt = $pdo->prepare(<<<SQL
+    SELECT *
+    FROM PERSONNE
+    WHERE idPers = :id
+SQL
+    );
+
+    $stmt->execute(array(':id' => $id));
+
+    $stmt->setFetchMode(PDO::FETCH_CLASS, 'Enseignant');
+
+    if(($object = $stmt->fetch()) !== false) {
+      // On récupère maintenant l'Enseignant
+      $stmt2 = $pdo->prepare(<<<SQL
+      SELECT *
+      FROM ENSEIGNANT
+      WHERE idEns = :id
+SQL
+      );
+      $stmt2->execute(array(':id' => $id));
+      $stmt2->setFetchMode(PDO::FETCH_CLASS, '');
+      if(($obj = $stmt2->fetch()) !== false) {
+        // On ajoute les informations manquantes
+        $object->idEns = $obj['idEns'];
+        $object->domainePredom = $obj['domainPredom'];
+        return $object;
+      }
+    }
+
   }
 
   /**

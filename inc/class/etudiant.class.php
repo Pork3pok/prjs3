@@ -32,9 +32,37 @@ class Etudiant {
   * @param int $id : l'ID de l'Etudiant
   */
   public static function createFromID($id) {
-    //TODO
-    // Récupère les données de la table "Personne" correspondantes à l'ID passé en paramètre, et y ajoute les données spécifiques de la table "Etudiant"
-  }
+    $pdo = myPDO::getInstance();
+    // On récupère d'abord la Personne
+    $stmt = $pdo->prepare(<<<SQL
+    SELECT *
+    FROM PERSONNE
+    WHERE idPers = :id
+SQL
+    );
+
+    $stmt->execute(array(':id' => $id));
+
+    $stmt->setFetchMode(PDO::FETCH_CLASS, 'Etudiant');
+
+    if(($object = $stmt->fetch()) !== false) {
+      // On récupère maintenant l'Etudiant
+      $stmt2 = $pdo->prepare(<<<SQL
+      SELECT *
+      FROM ETUDIANT
+      WHERE idEtu = :id
+SQL
+      );
+      $stmt2->execute(array(':id' => $id));
+      $stmt2->setFetchMode(PDO::FETCH_CLASS, '');
+      if(($obj = $stmt2->fetch()) !== false) {
+        // On ajoute les informations manquantes
+        $object->idEtu = $obj['idEtu'];
+        $object->cheminCV = $obj['cheminCV'];
+        return $object;
+      }
+    }
+}
 
   /**
   * Faire postuler cet Etudiant à une offre, passée en paramètre
