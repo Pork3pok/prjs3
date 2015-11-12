@@ -296,6 +296,44 @@ SQL
           $res .= "Le numéro de téléphone portable entré n'est pas valide<br>";
         }
 
+        // Vérification de la disponibilité de certains champs
+        $nbLogin = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getLogin() == $formulaire["login"]);
+            } else return false;
+          }));
+        if ($nbLogin > 0) {
+          $res .= "Ce login est déjà utilisé.<br>";
+        }
+        $nbTelF = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getTelFixe() == $formulaire["tel_fixe"]);
+            } else return false;
+          }));
+        if ($nbTelF > 0) {
+          $res .= "Ce numéro de téléphone fixe est déjà utilisé.<br>";
+        }
+        $nbTelP = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getTelPortable() == $formulaire["tel_port"]);
+            } else return false;
+          }));
+        if ($nbTelP > 0) {
+          $res .= "Ce numéro de téléphone portable est déjà utilisé.<br>";
+        }
+        $nbEmail = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getEmail() == $formulaire["email"]);
+            } else return false;
+          }));
+        if ($nbEmail > 0) {
+          $res .= "Cette adresse e-mail est déjà utilisée.<br>";
+        }
+
         // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
         if ($res == "") {
           Etudiant::nvEtudiant(
@@ -312,6 +350,7 @@ SQL
             htmlspecialchars($formulaire["num_rue"]),
             htmlspecialchars($formulaire["nom_rue"]),
             $complAdr);
+          $res = "Inscription réalisée.";
         }
       } else if ($type == "entreprise") {
         /*
@@ -367,6 +406,17 @@ SQL
           $res .= "Le code postal entré n'est pas valide<br>";
         }
 
+        // Vérification de la disponibilité de certains champs
+        $nbLogin = count(array_filter($this->listeEntreprises,
+          function($e) use ($formulaire) {
+            if ($e instanceof Entreprise) {
+              return ($e->getLogin() == $formulaire["login"]);
+            } else return false;
+          }));
+        if ($nbLogin > 0) {
+          $res .= "Ce login est déjà utilisé.<br>";
+        }
+
         // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
         if ($res == "") {
           Entreprise::nvEntreprise(
@@ -381,6 +431,7 @@ SQL
             $complAdr,
             $siteWeb,
             htmlspecialchars($formulaire["description"]));
+          $res = "Inscription réalisée.";
         }
       } else if ($type == "enseignant") {
         /*
@@ -451,6 +502,44 @@ SQL
           $res .= "Le numéro de téléphone portable entré n'est pas valide<br>";
         }
 
+        // Vérification de la disponibilité de certains champs
+        $nbLogin = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getLogin() == $formulaire["login"]);
+            } else return false;
+          }));
+        if ($nbLogin > 0) {
+          $res .= "Ce login est déjà utilisé.<br>";
+        }
+        $nbTelF = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getTelFixe() == $formulaire["tel_fixe"]);
+            } else return false;
+          }));
+        if ($nbTelF > 0) {
+          $res .= "Ce numéro de téléphone fixe est déjà utilisé.<br>";
+        }
+        $nbTelP = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getTelPortable() == $formulaire["tel_port"]);
+            } else return false;
+          }));
+        if ($nbTelP > 0) {
+          $res .= "Ce numéro de téléphone portable est déjà utilisé.<br>";
+        }
+        $nbEmail = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getEmail() == $formulaire["email"]);
+            } else return false;
+          }));
+        if ($nbEmail > 0) {
+          $res .= "Cette adresse e-mail est déjà utilisée.<br>";
+        }
+
         // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
         if ($res == "") {
           Enseignant::nvEnseignant(
@@ -468,6 +557,7 @@ SQL
             htmlspecialchars($formulaire["nom_rue"]),
             $complAdr,
             $domaine);
+          $res = "Inscription réalisée.";
         }
       } else {
         $res = "Erreur dans le formulaire d'inscription";

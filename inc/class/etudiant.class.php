@@ -120,6 +120,38 @@ SQL
   }
 
   /**
+   * Accesseur au login
+   * @return String  : login
+   */
+  public function getLogin() {
+    return $this->login;
+  }
+
+  /**
+   * Accesseur au numéro de téléphone fixe
+   * @return String  : num de tel fixe
+   */
+  public function getTelFixe() {
+    return $this->telF;
+  }
+
+  /**
+   * Accesseur au numéro de téléphone portable
+   * @return String  : num de tel portable
+   */
+  public function getTelPortable() {
+    return $this->telP;
+  }
+
+  /**
+   * Accesseur à l'adresse email
+   * @return String  : email
+   */
+  public function getEmail() {
+    return $this->email;
+  }
+
+  /**
   * Faire postuler cet Etudiant à une offre, passée en paramètre
   * @param OffreStage $o : l'offre à laquelle postuler
   * @return void

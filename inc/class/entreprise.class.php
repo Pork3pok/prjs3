@@ -86,6 +86,14 @@ SQL
   }
 
   /**
+   * Accesseur au login
+   * @return String  : login
+   */
+  public function getLogin() {
+    return $this->login;
+  }
+
+  /**
    * Crée une Offre dans la BD, correspondant à cette entreprise
    * @param  $_REQUEST $formulaire : les données de l'offre, entrées dans le formulaire par l'entreprise
    * @return void
