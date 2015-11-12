@@ -9,7 +9,7 @@ session_start();
 
 if (isset($_post['login']) && isset($_POST['challenge'])){
 
-	if(connexion($_post['login'], $_POST['challenge'])){
+	if(gestionnaire::connexion($_post['login'], $_POST['challenge'])){
 		$type = gestionnaire::typeUtilisateur($_post['login']);
 		echo "<script type='text/javascript'>document.location.replace('" . $type . ".php');</script>";
 
