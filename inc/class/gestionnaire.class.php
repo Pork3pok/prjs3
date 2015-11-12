@@ -229,6 +229,358 @@ SQL
     // 1ère étape : déterminer le type d'inscription (enseignant/étudiant/entreprise)
     // 2ème étape : vérifier la validité des champs selon le type d'inscription
     // 3ème étape : ajouter dans la BD
+    $res = ""; // chaine de caractère retournée
+    if ($formulaire != null && isset($formulaire["typeInscription"])) {
+      $type = $formulaire["typeInscription"];
+      if ($type == "etudiant") {
+        /*
+         * INSCRIPTION ETUDIANT
+         */
+
+        // Vérification de l'existence et du remplissage des champs
+        if (!isset($formulaire["nom"]) || empty($formulaire["nom"])) {
+          $res .= "Le champ \"nom\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["prenom"]) || empty($formulaire["prenom"])) {
+          $res .= "Le champ \"prénom\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["login"]) || empty($formulaire["login"])) {
+          $res .= "Le champ \"login\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["mdp"]) || empty($formulaire["mdp"])) {
+          $res .= "Le champ \"mot de passe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["sexe"]) || empty($formulaire["sexe"]) || ($formulaire["sexe"] != "h" && $formulaire["sexe"] != "f")) {
+          $res .= "Le champ \"sexe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["tel_fixe"]) || empty($formulaire["tel_fixe"])) {
+          $res .= "Le champ \"téléphone fixe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["tel_port"]) || empty($formulaire["tel_port"])) {
+          $res .= "Le champ \"téléphone portable\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["email"]) || empty($formulaire["email"])) {
+          $res .= "Le champ \"email\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["ville"]) || empty($formulaire["ville"])) {
+          $res .= "Le champ \"ville\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["code_postal"]) || empty($formulaire["code_postal"])) {
+          $res .= "Le champ \"code postal\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["num_rue"]) || empty($formulaire["num_rue"])) {
+          $res .= "Le champ \"numéro de la rue\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["nom_rue"]) || empty($formulaire["nom_rue"])) {
+          $res .= "Le champ \"nom de la rue\" est obligatoire<br>";
+        }
+
+        // Valeurs par défaut des champs facultatifs
+        if (!isset($formulaire["compl_adr"])) {
+          $complAdr = "";
+        } else {
+          $complAdr = $formulaire["compl_adr"];
+        }
+
+        // Vérifications de la validité des champs remplis
+        if (!preg_match("/^[0-9]{5,5}$/", $formulaire["code_postal"])) {
+          $res .= "Le code postal entré n'est pas valide<br>";
+        }
+        if (!filter_var($formulaire["email"], FILTER_VALIDATE_EMAIL)) {
+          $res .= "L'adresse e-mail entrée n'est pas valide<br>";
+        }
+        if (!preg_match("/^[0-9]{10,10}$/", $formulaire["tel_fixe"])) {
+          $res .= "Le numéro de téléphone fixe entré n'est pas valide<br>";
+        }
+        if (!preg_match("/^[0-9]{10,10}$/", $formulaire["tel_port"])) {
+          $res .= "Le numéro de téléphone portable entré n'est pas valide<br>";
+        }
+
+        // Vérification de la disponibilité de certains champs
+        $nbLogin = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getLogin() == $formulaire["login"]);
+            } else return false;
+          }));
+        if ($nbLogin > 0) {
+          $res .= "Ce login est déjà utilisé.<br>";
+        }
+        $nbTelF = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getTelFixe() == $formulaire["tel_fixe"]);
+            } else return false;
+          }));
+        if ($nbTelF > 0) {
+          $res .= "Ce numéro de téléphone fixe est déjà utilisé.<br>";
+        }
+        $nbTelP = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getTelPortable() == $formulaire["tel_port"]);
+            } else return false;
+          }));
+        if ($nbTelP > 0) {
+          $res .= "Ce numéro de téléphone portable est déjà utilisé.<br>";
+        }
+        $nbEmail = count(array_filter($this->listeEtudiants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Etudiant) {
+              return ($e->getEmail() == $formulaire["email"]);
+            } else return false;
+          }));
+        if ($nbEmail > 0) {
+          $res .= "Cette adresse e-mail est déjà utilisée.<br>";
+        }
+
+        // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
+        if ($res == "") {
+          Etudiant::nvEtudiant(
+            htmlspecialchars($formulaire["login"]),
+            sha1($formulaire["mdp"]),
+            htmlspecialchars($formulaire["nom"]),
+            htmlspecialchars($formulaire["prenom"]),
+            $formulaire["sexe"],
+            $formulaire["tel_fixe"],
+            $formulaire["tel_port"],
+            $formulaire["email"],
+            htmlspecialchars($formulaire["ville"]),
+            $formulaire["code_postal"],
+            htmlspecialchars($formulaire["num_rue"]),
+            htmlspecialchars($formulaire["nom_rue"]),
+            $complAdr);
+          $res = "Inscription réalisée.";
+        }
+      } else if ($type == "entreprise") {
+        /*
+         * INSCRIPTION ENTREPRISE
+         */
+
+        // Vérification de l'existence et du remplissage des champs
+        if (!isset($formulaire["nom"]) || empty($formulaire["nom"])) {
+          $res .= "Le champ \"nom\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["code"]) || empty($formulaire["code"])) {
+          $res .= "Le champ \"code\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["login"]) || empty($formulaire["login"])) {
+          $res .= "Le champ \"login\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["mdp"]) || empty($formulaire["mdp"])) {
+          $res .= "Le champ \"mot de passe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["email"]) || empty($formulaire["email"])) {
+          $res .= "Le champ \"email\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["ville"]) || empty($formulaire["ville"])) {
+          $res .= "Le champ \"ville\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["code_postal"]) || empty($formulaire["code_postal"])) {
+          $res .= "Le champ \"code postal\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["num_rue"]) || empty($formulaire["num_rue"])) {
+          $res .= "Le champ \"numéro de la rue\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["nom_rue"]) || empty($formulaire["nom_rue"])) {
+          $res .= "Le champ \"nom de la rue\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["description"]) || empty($formulaire["description"])) {
+          $res .= "Le champ \"description\" est obligatoire<br>";
+        }
+
+        // Valeurs par défaut des champs facultatifs
+        if (!isset($formulaire["compl_adr"])) {
+          $complAdr = "";
+        } else {
+          $complAdr = $formulaire["compl_adr"];
+        }
+        if (!isset($formulaire["site_web"])) {
+          $siteWeb = "";
+        } else {
+          $siteWeb = $formulaire["site_web"];
+        }
+
+        // Vérifications de la validité des champs remplis
+        if (!preg_match("/^[0-9]{5,5}$/", $formulaire["code_postal"])) {
+          $res .= "Le code postal entré n'est pas valide<br>";
+        }
+        // Vérification de la validité d'une URL
+        // http://php.net/manual/en/function.preg-match.php#93824
+        $regex = "((https?|ftp)\:\/\/)?"; // SCHEME
+        $regex .= "([a-z0-9+!*(),;?&=\$_.-]+(\:[a-z0-9+!*(),;?&=\$_.-]+)?@)?"; // User and Pass
+        $regex .= "([a-z0-9-.]*)\.([a-z]{2,4})"; // Host or IP
+        $regex .= "(\:[0-9]{2,5})?"; // Port
+        $regex .= "(\/([a-z0-9+\$_-]\.?)+)*\/?"; // Path
+        $regex .= "(\?[a-z+&\$_.-][a-z0-9;:@&%=+\/\$_.-]*)?"; // GET Query
+        $regex .= "(#[a-z_.-][a-z0-9+\$_.-]*)?"; // Anchor
+        
+        if($siteWeb != "" && !(preg_match("/^$regex$/", $siteWeb))) {
+          // on ne vérifie l'URL que si le case n'est pas vide
+          $res .= "L'URL du site web n'est pas valide<br>";
+        }
+
+        // Vérification de la disponibilité de certains champs
+        $nbLogin = count(array_filter($this->listeEntreprises,
+          function($e) use ($formulaire) {
+            if ($e instanceof Entreprise) {
+              return ($e->getLogin() == $formulaire["login"]);
+            } else return false;
+          }));
+        if ($nbLogin > 0) {
+          $res .= "Ce login est déjà utilisé.<br>";
+        }
+
+        // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
+        if ($res == "") {
+          Entreprise::nvEntreprise(
+            htmlspecialchars($formulaire["login"]),
+            sha1($formulaire["mdp"]),
+            htmlspecialchars($formulaire["nom"]),
+            htmlspecialchars($formulaire["code"]),
+            htmlspecialchars($formulaire["ville"]),
+            $formulaire["code_postal"],
+            htmlspecialchars($formulaire["num_rue"]),
+            htmlspecialchars($formulaire["nom_rue"]),
+            $complAdr,
+            $siteWeb,
+            htmlspecialchars($formulaire["description"]));
+          $res = "Inscription réalisée.";
+        }
+      } else if ($type == "enseignant") {
+        /*
+         * INSCRIPTION ENSEIGNANT
+         */
+
+        // Vérification de l'existence et du remplissage des champs
+        if (!isset($formulaire["nom"]) || empty($formulaire["nom"])) {
+          $res .= "Le champ \"nom\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["prenom"]) || empty($formulaire["prenom"])) {
+          $res .= "Le champ \"prénom\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["login"]) || empty($formulaire["login"])) {
+          $res .= "Le champ \"login\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["mdp"]) || empty($formulaire["mdp"])) {
+          $res .= "Le champ \"mot de passe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["sexe"]) || empty($formulaire["sexe"]) || ($formulaire["sexe"] != "h" && $formulaire["sexe"] != "f")) {
+          $res .= "Le champ \"sexe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["tel_fixe"]) || empty($formulaire["tel_fixe"])) {
+          $res .= "Le champ \"téléphone fixe\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["tel_port"]) || empty($formulaire["tel_port"])) {
+          $res .= "Le champ \"téléphone portable\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["email"]) || empty($formulaire["email"])) {
+          $res .= "Le champ \"email\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["ville"]) || empty($formulaire["ville"])) {
+          $res .= "Le champ \"ville\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["code_postal"]) || empty($formulaire["code_postal"])) {
+          $res .= "Le champ \"code postal\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["num_rue"]) || empty($formulaire["num_rue"])) {
+          $res .= "Le champ \"numéro de la rue\" est obligatoire<br>";
+        }
+        if (!isset($formulaire["nom_rue"]) || empty($formulaire["nom_rue"])) {
+          $res .= "Le champ \"nom de la rue\" est obligatoire<br>";
+        }
+
+        // Valeurs par défaut des champs facultatifs
+        if (!isset($formulaire["compl_adr"])) {
+          $complAdr = "";
+        } else {
+          $complAdr = $formulaire["compl_adr"];
+        }
+        if (!isset($formulaire["domaine"])) {
+          $domaine = "";
+        } else {
+          $domaine = $formulaire["domaine"];
+        }
+
+        // Vérifications de la validité des champs remplis
+        if (!preg_match("/^[0-9]{5,5}$/", $formulaire["code_postal"])) {
+          $res .= "Le code postal entré n'est pas valide<br>";
+        }
+        if (!filter_var($formulaire["email"], FILTER_VALIDATE_EMAIL)) {
+          $res .= "L'adresse e-mail entrée n'est pas valide<br>";
+        }
+        if (!preg_match("/^[0-9]{10,10}$/", $formulaire["tel_fixe"])) {
+          $res .= "Le numéro de téléphone fixe entré n'est pas valide<br>";
+        }
+        if (!preg_match("/^[0-9]{10,10}$/", $formulaire["tel_port"])) {
+          $res .= "Le numéro de téléphone portable entré n'est pas valide<br>";
+        }
+
+        // Vérification de la disponibilité de certains champs
+        $nbLogin = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getLogin() == $formulaire["login"]);
+            } else return false;
+          }));
+        if ($nbLogin > 0) {
+          $res .= "Ce login est déjà utilisé.<br>";
+        }
+        $nbTelF = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getTelFixe() == $formulaire["tel_fixe"]);
+            } else return false;
+          }));
+        if ($nbTelF > 0) {
+          $res .= "Ce numéro de téléphone fixe est déjà utilisé.<br>";
+        }
+        $nbTelP = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getTelPortable() == $formulaire["tel_port"]);
+            } else return false;
+          }));
+        if ($nbTelP > 0) {
+          $res .= "Ce numéro de téléphone portable est déjà utilisé.<br>";
+        }
+        $nbEmail = count(array_filter($this->listeEnseignants,
+          function($e) use ($formulaire) {
+            if ($e instanceof Enseignant) {
+              return ($e->getEmail() == $formulaire["email"]);
+            } else return false;
+          }));
+        if ($nbEmail > 0) {
+          $res .= "Cette adresse e-mail est déjà utilisée.<br>";
+        }
+
+        // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
+        if ($res == "") {
+          Enseignant::nvEnseignant(
+            htmlspecialchars($formulaire["login"]),
+            sha1($formulaire["mdp"]),
+            htmlspecialchars($formulaire["nom"]),
+            htmlspecialchars($formulaire["prenom"]),
+            $formulaire["sexe"],
+            $formulaire["tel_fixe"],
+            $formulaire["tel_port"],
+            $formulaire["email"],
+            htmlspecialchars($formulaire["ville"]),
+            $formulaire["code_postal"],
+            htmlspecialchars($formulaire["num_rue"]),
+            htmlspecialchars($formulaire["nom_rue"]),
+            $complAdr,
+            $domaine);
+          $res = "Inscription réalisée.";
+        }
+      } else {
+        $res = "Erreur dans le formulaire d'inscription";
+      }
+    } else {
+      $res = "Erreur dans le formulaire d'inscription";
+    }
+
+    return $res;
   }
 
   /**

@@ -47,6 +47,53 @@ SQL
   }
 
   /**
+   * Méthode statique. Crée une Entreprise dans la BD
+   * @param  String  $login       : le login de connexion
+   * @param  String  $sha1mdp     : le mdp crypté en sha1
+   * @param  String  $nom         : le nom de l'entreprise
+   * @param  String  $code        : le code de l'entreprise
+   * @param  String  $ville       : la ville de l'entreprise
+   * @param  String  $codepostal  : le CP de l'entreprise
+   * @param  String  $numrue      : le numéro de la rue de l'entreprise
+   * @param  String  $nomrue      : le nom de la rue de l'entreprise
+   * @param  String  $complAdr    : un éventuel complément d'adresse
+   * @param  String  $siteWeb     : le site web de l'entreprise
+   * @param  String  $description : description de l'entreprise
+   * @return void
+   */
+  public static function nvEntreprise($login, $sha1mdp, $nom, $code, $ville, $codepostal, $numrue, $nomrue, $complAdr, $siteWeb, $description) {
+    // Insertion dans la classe "Entreprise"
+    $pdo = myPDO::getInstance();
+    $stmt = $pdo->prepare(<<<SQL
+      INSERT INTO
+      ENTREPRISE(login, sha1mdp, nomEnt, codeEnt, villeEnt, CPEnt, numRueEnt, rueEnt, complAdrEnt, siteWebEnt, description)
+      VALUES(:login, :sha1mdp, :nom, :code, :ville, :CP, :numRue, :nomRue, :complAdr, :siteWeb, :description)
+SQL
+    );
+    $stmt->execute(array(
+      "login" => $login,
+      "sha1mdp" => $sha1mdp,
+      "nom" => $nom,
+      "code" => $code,
+      "ville" => $ville,
+      "CP" => $codepostal,
+      "numRue" => $numrue,
+      "nomRue" => $nomrue,
+      "complAdr" => $complAdr,
+      "siteWeb" => $siteWeb,
+      "description" => $description
+    ));
+  }
+
+  /**
+   * Accesseur au login
+   * @return String  : login
+   */
+  public function getLogin() {
+    return $this->login;
+  }
+
+  /**
    * Crée une Offre dans la BD, correspondant à cette entreprise
    * @param  $_REQUEST $formulaire : les données de l'offre, entrées dans le formulaire par l'entreprise
    * @return void

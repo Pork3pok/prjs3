@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `enseignant` (
 --
 
 CREATE TABLE IF NOT EXISTS `entreprise` (
-  `idEnt` int(10) NOT NULL,
+  `idEnt` int(10) NOT NULL AUTO_INCREMENT,
   `login` varchar(20) DEFAULT NULL,
   `sha1mdp` varchar(40) DEFAULT NULL,
   `nomEnt` varchar(50) DEFAULT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE IF NOT EXISTS `offrestage` (
 --
 
 CREATE TABLE IF NOT EXISTS `personne` (
-  `idPers` int(10) NOT NULL,
+  `idPers` int(10) NOT NULL AUTO_INCREMENT,
   `login` varchar(20) DEFAULT NULL,
   `sha1mdp` varchar(40) DEFAULT NULL,
   `nom` varchar(20) DEFAULT NULL,
