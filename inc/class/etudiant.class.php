@@ -62,7 +62,27 @@ SQL
         return $object;
       }
     }
-}
+  }
+
+  /**
+   * Méthode statique. Crée un étudiant dans la BD
+   * @param  String  $login    : le login de connexion
+   * @param  String  $sha1mdp  : le mot de passe crypté en sha1
+   * @param  String  $nom      : le nom de l'étudiant
+   * @param  String  $prenom   : le prénom de l'étudiant
+   * @param  char    $sexe     : le sexe de l'étudiant (H/F)
+   * @param  String  $telFixe  : le num de tel fixe de l'étudiant
+   * @param  String  $telPort  : le num de tel port de l'étudiant
+   * @param  String  $email    : l'email de l'étudiant
+   * @param  String  $ville    : la ville de l'étudiant
+   * @param  String  $CP       : le code postal de l'étudiant
+   * @param  String  $numRue   : le numéro de la rue de l'étudiant
+   * @param  String  $nomRue   : le nom de la rue
+   * @param  String  $complAdr : un éventuel complément d'adresse
+   * @return void
+   */
+  public static function nvEtudiant($login, $sha1mdp, $nom, $prenom, $sexe, $telFixe, $telPort, $email, $ville, $CP, $numRue, $nomRue, $complAdr) {
+  }
 
   /**
   * Faire postuler cet Etudiant à une offre, passée en paramètre

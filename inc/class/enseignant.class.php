@@ -65,6 +65,27 @@ SQL
   }
 
   /**
+   * Méthode statique. Crée un enseignant dans la BD
+   * @param  String  $login    : le login de connexion
+   * @param  String  $sha1mdp  : le mot de passe crypté en sha1
+   * @param  String  $nom      : le nom de l'enseignant
+   * @param  String  $prenom   : le prénom de l'enseignant
+   * @param  char    $sexe     : le sexe de l'enseignant (H/F)
+   * @param  String  $telFixe  : le num de tel fixe de l'enseignant
+   * @param  String  $telPort  : le num de tel port de l'enseignant
+   * @param  String  $email    : l'email de l'enseignant
+   * @param  String  $ville    : la ville de l'enseignant
+   * @param  String  $CP       : le code postal de l'enseignant
+   * @param  String  $numRue   : le numéro de la rue de l'enseignant
+   * @param  String  $nomRue   : le nom de la rue
+   * @param  String  $complAdr : un éventuel complément d'adresse
+   * @param  String  $domaine  : le domaine de prédilection de l'enseignant
+   * @return void
+   */
+  public static function nvEnseignant($login, $sha1mdp, $nom, $prenom, $sexe, $telFixe, $telPort, $email, $ville, $CP, $numRue, $nomRue, $complAdr, $domaine) {
+  }
+
+  /**
   * Faire écrire une description à cet Enseignant
   * @param  Entreprise $e    : l'Entreprise à laquelle correspond la description
   * @param  String     $desc : le contenu de la description
