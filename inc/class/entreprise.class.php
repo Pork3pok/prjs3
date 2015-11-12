@@ -62,6 +62,27 @@ SQL
    * @return void
    */
   public static function nvEntreprise($login, $sha1mdp, $nom, $code, $ville, $codepostal, $numrue, $nomrue, $complAdr, $siteWeb, $description) {
+    // Insertion dans la classe "Entreprise"
+    $pdo = myPDO::getInstance();
+    $stmt = $pdo->prepare(<<<SQL
+      INSERT INTO
+      ENTREPRISE(login, sha1mdp, nomEnt, codeEnt, villeEnt, CPEnt, numRueEnt, rueEnt, complAdrEnt, siteWebEnt, description)
+      VALUES(:login, :sha1mdp, :nom, :code, :ville, :CP, :numRue, :nomRue, :complAdr, :siteWeb, :description)
+SQL
+    );
+    $stmt->execute(array(
+      "login" => $login,
+      "sha1mdp" => $sha1mdp,
+      "nom" => $nom,
+      "code" => $code,
+      "ville" => $ville,
+      "CP" => $codepostal,
+      "numRue" => $numrue,
+      "nomRue" => $nomrue,
+      "complAdr" => $complAdr,
+      "siteWeb" => $siteWeb,
+      "description" => $description
+    ));
   }
 
   /**

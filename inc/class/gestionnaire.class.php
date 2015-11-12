@@ -366,15 +366,6 @@ SQL
         if (!preg_match("/^[0-9]{5,5}$/", $formulaire["code_postal"])) {
           $res .= "Le code postal entré n'est pas valide<br>";
         }
-        if (!filter_var($formulaire["email"], FILTER_VALIDATE_EMAIL)) {
-          $res .= "L'adresse e-mail entrée n'est pas valide<br>";
-        }
-        if (!preg_match("/^[0-9]{10,10}$/", $formulaire["tel_fixe"])) {
-          $res .= "Le numéro de téléphone fixe entré n'est pas valide<br>";
-        }
-        if (!preg_match("/^[0-9]{10,10}$/", $formulaire["tel_port"])) {
-          $res .= "Le numéro de téléphone portable entré n'est pas valide<br>";
-        }
 
         // Si $res est toujours vide (aucune erreur), on ajoute dans la BD!
         if ($res == "") {
