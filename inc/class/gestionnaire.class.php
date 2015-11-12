@@ -405,6 +405,20 @@ SQL
         if (!preg_match("/^[0-9]{5,5}$/", $formulaire["code_postal"])) {
           $res .= "Le code postal entré n'est pas valide<br>";
         }
+        // Vérification de la validité d'une URL
+        // http://php.net/manual/en/function.preg-match.php#93824
+        $regex = "((https?|ftp)\:\/\/)?"; // SCHEME
+        $regex .= "([a-z0-9+!*(),;?&=\$_.-]+(\:[a-z0-9+!*(),;?&=\$_.-]+)?@)?"; // User and Pass
+        $regex .= "([a-z0-9-.]*)\.([a-z]{2,4})"; // Host or IP
+        $regex .= "(\:[0-9]{2,5})?"; // Port
+        $regex .= "(\/([a-z0-9+\$_-]\.?)+)*\/?"; // Path
+        $regex .= "(\?[a-z+&\$_.-][a-z0-9;:@&%=+\/\$_.-]*)?"; // GET Query
+        $regex .= "(#[a-z_.-][a-z0-9+\$_.-]*)?"; // Anchor
+        
+        if($siteWeb != "" && !(preg_match("/^$regex$/", $siteWeb))) {
+          // on ne vérifie l'URL que si le case n'est pas vide
+          $res .= "L'URL du site web n'est pas valide<br>";
+        }
 
         // Vérification de la disponibilité de certains champs
         $nbLogin = count(array_filter($this->listeEntreprises,
