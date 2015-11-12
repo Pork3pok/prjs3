@@ -82,6 +82,41 @@ SQL
    * @return void
    */
   public static function nvEtudiant($login, $sha1mdp, $nom, $prenom, $sexe, $telFixe, $telPort, $email, $ville, $CP, $numRue, $nomRue, $complAdr) {
+    // Insertion dans la table "Personne"
+    $pdo = myPDO::getInstance();
+    $stmt = $pdo->prepare(<<<SQL
+      INSERT INTO
+      PERSONNE(login, sha1mdp, nom, prenom, sexe, telF, telP, email, ville, CP, numRue, rue, complAdr)
+      VALUES(:login, :sha1mdp, :nom, :prenom, :sexe, :telF, :telP, :email, :ville, :CP, :numRue, :nomRue, :complAdr)
+SQL
+    );
+    $stmt->execute(array(
+      "login" => $login,
+      "sha1mdp" => $sha1mdp,
+      "nom" => $nom,
+      "prenom" => $prenom,
+      "sexe" => $sexe,
+      "telF" => $telFixe,
+      "telP" => $telPort,
+      "email" => $email,
+      "ville" => $ville,
+      "CP" => $CP,
+      "numRue" => $numRue,
+      "nomRue" => $nomRue,
+      "complAdr" => $complAdr
+    ));
+
+    // Insertion dans la table "Etudiant"
+    $idCree = $pdo->lastInsertId();
+    $stmt2 = $pdo->prepare(<<<SQL
+      INSERT INTO
+      ETUDIANT(idEtu)
+      VALUES(:idEtu)
+SQL
+    );
+    $stmt2->execute(array(
+      "idEtu" => $idCree
+    ));
   }
 
   /**
