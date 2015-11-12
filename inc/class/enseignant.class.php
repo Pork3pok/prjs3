@@ -83,15 +83,6 @@ SQL
    * @return void
    */
   public static function nvEnseignant($login, $sha1mdp, $nom, $prenom, $sexe, $telFixe, $telPort, $email, $ville, $CP, $numRue, $nomRue, $complAdr, $domaine) {
-  }
-
-  /**
-  * Faire écrire une description à cet Enseignant
-  * @param  Entreprise $e    : l'Entreprise à laquelle correspond la description
-  * @param  String     $desc : le contenu de la description
-  * @return void
-  */
-  public function ecrireDescription ($e, $desc) {
     // Insertion dans la table "Personne"
     $pdo = myPDO::getInstance();
     $stmt = $pdo->prepare(<<<SQL
@@ -128,6 +119,16 @@ SQL
       "idEns" => $idCree,
       "domaine" => $domaine
     ));
+  }
+
+  /**
+  * Faire écrire une description à cet Enseignant
+  * @param  Entreprise $e    : l'Entreprise à laquelle correspond la description
+  * @param  String     $desc : le contenu de la description
+  * @return void
+  */
+  public function ecrireDescription ($e, $desc) {
+    //TODO
   }
 
   /**
