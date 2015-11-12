@@ -111,7 +111,7 @@ SQL
     $idCree = $pdo->lastInsertId();
     $stmt2 = $pdo->prepare(<<<SQL
       INSERT INTO
-      ETUDIANT(idEns, domainePredom)
+      ENSEIGNANT(idEns, domainePredom)
       VALUES(:idEns, :domaine)
 SQL
     );
